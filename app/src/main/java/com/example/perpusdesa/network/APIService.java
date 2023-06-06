@@ -6,9 +6,13 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Url;
 
 public interface APIService {
 
-    @GET("/photos")
+    @GET("/books")
     Call<List<PepusModel>> getPerpusList();
+    @GET
+    Call<String> getPDF(@Url String url);
+
 }

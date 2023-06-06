@@ -2,16 +2,30 @@ package com.example.perpusdesa.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.perpusdesa.R;
+import com.example.perpusdesa.adapter.BookmarkListAdapter;
+import com.example.perpusdesa.dao.BookmarkDao;
+import com.example.perpusdesa.dao.database.BookmarkDatabase;
+import com.example.perpusdesa.model.Bookmark;
+import com.example.perpusdesa.model.PepusModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class BookmarkActivity extends AppCompatActivity {
+import java.util.List;
+
+public class BookmarkActivity extends AppCompatActivity implements BookmarkListAdapter.ItemClickListener {
+
+    private BookmarkDao bookmarkDao;
+    private List<Bookmark> bookmarkedBooks;
+    private BookmarkListAdapter adapter;
 
     BottomNavigationView bottomNavigationView;
 
@@ -40,6 +54,40 @@ public class BookmarkActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        // Inisialisasi bookmarkDao
+        bookmarkDao = BookmarkDatabase.getInstance(this).bookmarkDao();
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewBookmark);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new BookmarkListAdapter(this, bookmarkedBooks, this);
+        recyclerView.setAdapter(adapter);
+
+
+        // Ambil daftar buku yang ditandai sebagai bookmark dari database
+        fetchBookmarks();
+
+    }
+    private void fetchBookmarks() {
+        // Jalankan operasi database pada thread background
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                bookmarkedBooks = bookmarkDao.getAllBookmarks();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.setBookmarkedList(bookmarkedBooks);
+                    }
+                });
+            }
+        });
+    }
+
+
+    @Override
+    public void onBookmarkClick(Bookmark bookmarkedBook) {
 
     }
 }

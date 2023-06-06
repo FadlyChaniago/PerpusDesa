@@ -27,10 +27,16 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MyView
     private ItemClickListener clickListener;
     private List<PepusModel> pepusModelList = new ArrayList<>();
 
+    public void setFilteredList(List<PepusModel> filteredList){
+        this.perpusList = filteredList;
+        notifyDataSetChanged();
+    }
+
     public HomeListAdapter(Context context, List<PepusModel> perpusList, ItemClickListener clickListener) {
         this.context = context;
         this.perpusList = perpusList;
         this.clickListener = clickListener;
+
     }
 
     public void setPerpusList(List<PepusModel> perpusList) {
@@ -49,21 +55,26 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.tvTitle.setText(this.perpusList.get(position).getTitle().toString());
         holder.tvId.setText(this.perpusList.get(position).getId().toString());
+        holder.tvDes.setText(this.perpusList.get(position).getDesciption().toString());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailHomeActivity.class);
                 intent.putExtra("image",perpusList.get(holder.getAdapterPosition()).getImage());
+                intent.putExtra("pdf", perpusList.get(holder.getAdapterPosition()).getUrl());
                 context.startActivity(intent);
                 clickListener.onPerpusClick(perpusList.get(position));
             }
+
         });
         Glide.with(context)
                 .load(this.perpusList.get(position).getImage())
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.imageView);
+
     }
+
 
     @Override
     public int getItemCount() {
@@ -75,13 +86,14 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MyView
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder  {
-        TextView tvTitle, tvId;
+        TextView tvTitle, tvId, tvDes;
         ImageView imageView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             tvTitle = (TextView)itemView.findViewById(R.id.titleView);
             tvId = (TextView)itemView.findViewById(R.id.id);
+            tvDes = (TextView)itemView.findViewById(R.id.deskripsi);
             imageView = (ImageView) itemView.findViewById(R.id.img_row);
 
         }

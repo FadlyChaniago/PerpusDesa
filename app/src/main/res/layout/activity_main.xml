@@ -11,25 +11,28 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/search"
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/search_bg"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"/>
+            android:layout_marginStart="30dp"
+            app:queryHint="Search Here ...."
+            app:iconifiedByDefault="false"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/searchView"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_below="@+id/search"
-            tools:listitem=""/>
+            tools:listitem="" />
     </RelativeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -40,5 +43,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navmenu"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

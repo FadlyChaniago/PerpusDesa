@@ -1,8 +1,11 @@
 package com.example.perpusdesa.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,12 +17,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.perpusdesa.R;
+import com.example.perpusdesa.activity.BookmarkActivity;
+import com.example.perpusdesa.activity.ProfileActivity;
 import com.example.perpusdesa.adapter.HomeListAdapter;
+import com.example.perpusdesa.databinding.ActivityMainBinding;
 import com.example.perpusdesa.model.PepusModel;
 import com.example.perpusdesa.viewmodel.PerpusListViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements HomeListAdapter.ItemClickListener {
@@ -27,7 +34,11 @@ public class MainActivity extends AppCompatActivity implements HomeListAdapter.I
     private List<PepusModel> pepusModelList;
     private HomeListAdapter adapter;
     private PerpusListViewModel viewModel;
+    private SearchView searchView;
+    private ActivityMainBinding binding;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     BottomNavigationView bottomNavigationView;
 
     @Override
@@ -35,6 +46,23 @@ public class MainActivity extends AppCompatActivity implements HomeListAdapter.I
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sharedPreferences = getSharedPreferences("MyAppName" , MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        searchView = findViewById(R.id.searchView);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return false;
+            }
+        });
         bottomNavigationView = findViewById(R.id.nav);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -76,8 +104,25 @@ public class MainActivity extends AppCompatActivity implements HomeListAdapter.I
         viewModel.makeApiCall();
     }
 
+    private void filterList(String text) {
+        List<PepusModel> filteredList = new ArrayList<>();
+        for (PepusModel pepusModel : pepusModelList){
+            if (pepusModel.getId().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(pepusModel);
+            }
+            if (pepusModel.getTitle().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(pepusModel);
+            }
+        }
+        if(filteredList.isEmpty()){
+            Toast.makeText(this, "no data found", Toast.LENGTH_SHORT).show();
+        }else{
+            adapter.setFilteredList(filteredList);
+        }
+    }
+
     @Override
     public void onPerpusClick(PepusModel book) {
-        Toast.makeText(this, "Clicked Book Name is : " +book.getId(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Clicked Book Name is : " +book.getTitle(), Toast.LENGTH_SHORT).show();
     }
 }

@@ -3,11 +3,15 @@ package com.example.perpusdesa.model;
 public class PepusModel {
     private String id;
     private String url;
+    private String url_image;
+    private String desciption;
     private String title;
 
-    public PepusModel(String title, String image, String id) {
+    public PepusModel(String title,String url, String image, String id, String desciption) {
         this.title = title;
-        this.url = image;
+        this.url = url;
+        this.url_image = image;
+        this.desciption = desciption;
         this.id = id;
     }
     public String getTitle() {
@@ -18,12 +22,16 @@ public class PepusModel {
         this.title = title;
     }
 
+    public String getUrl() { return url; }
+
+    public void setUrl(String url) { this.url = url; }
+
     public String getImage() {
-        return url;
+        return url_image;
     }
 
     public void setImage(String image) {
-        this.url = image;
+        this.url_image = image;
     }
 
     public String getId() {
@@ -34,12 +42,11 @@ public class PepusModel {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "PepusModel{" +
-                "id='" + id + '\'' +
-                ", url='" + url + '\'' +
-                ", title='" + title + '\'' +
-                '}';
+    public String getDesciption() { return desciption; }
+
+    public void setDesciption(String desciption) {
+        this.desciption = desciption;
     }
+
+
 }
