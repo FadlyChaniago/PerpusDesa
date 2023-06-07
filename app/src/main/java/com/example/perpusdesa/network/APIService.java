@@ -12,7 +12,5 @@ public interface APIService {
 
     @GET("/books")
     Call<List<PepusModel>> getPerpusList();
-    @GET
-    Call<String> getPDF(@Url String url);
 
 }

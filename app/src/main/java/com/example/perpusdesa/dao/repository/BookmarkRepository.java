@@ -1,6 +1,7 @@
 package com.example.perpusdesa.dao.repository;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -11,29 +12,55 @@ import com.example.perpusdesa.model.Bookmark;
 import java.util.List;
 
 public class BookmarkRepository {
-
     private BookmarkDao bookmarkDao;
-    private LiveData<List<Bookmark>> bookmarkListLiveData;
+    private LiveData<List<Bookmark>> allBookmarks;
 
     public BookmarkRepository(Application application) {
         BookmarkDatabase database = BookmarkDatabase.getInstance(application);
         bookmarkDao = database.bookmarkDao();
-        bookmarkListLiveData = (LiveData<List<Bookmark>>) bookmarkDao.getAllBookmarks();
+        allBookmarks = bookmarkDao.getAllBookmarks();
     }
 
-    public LiveData<List<Bookmark>> getBookmarkListLiveData() {
-        return bookmarkListLiveData;
+    public LiveData<List<Bookmark>> getAllBookmarks() {
+        return allBookmarks;
     }
 
-    public void addBookmark(Bookmark bookmark) {
-        // Lakukan operasi untuk menambahkan bookmark ke database melalui DAO
-        bookmarkDao.insertBookmark(bookmark);
+    public void insertBookmark(Bookmark bookmark) {
+        new InsertBookmarkAsyncTask(bookmarkDao).execute(bookmark);
     }
 
-    public void removeBookmark(Bookmark bookmark) {
-        // Lakukan operasi untuk menghapus bookmark dari database melalui DAO
-        bookmarkDao.deleteBookmark(bookmark);
+    public void deleteBookmark(Bookmark bookmark) {
+        new DeleteBookmarkAsyncTask(bookmarkDao).execute(bookmark);
     }
 
-    // Metode lain yang diperlukan untuk operasi CRUD lainnya
+    private static class InsertBookmarkAsyncTask extends AsyncTask<Bookmark, Void, Void> {
+        private BookmarkDao bookmarkDao;
+
+        private InsertBookmarkAsyncTask(BookmarkDao bookmarkDao) {
+            this.bookmarkDao = bookmarkDao;
+        }
+
+        @Override
+        protected Void doInBackground(Bookmark... bookmarks) {
+            bookmarkDao.insertBookmark(bookmarks[0]);
+            return null;
+        }
+
+        public void execute(Bookmark bookmark) {
+        }
+    }
+
+    private static class DeleteBookmarkAsyncTask extends AsyncTask<Bookmark, Void, Void> {
+        private BookmarkDao bookmarkDao;
+
+        private DeleteBookmarkAsyncTask(BookmarkDao bookmarkDao) {
+            this.bookmarkDao = bookmarkDao;
+        }
+
+        @Override
+        protected Void doInBackground(Bookmark... bookmarks) {
+            bookmarkDao.deleteBookmark(bookmarks[0]);
+            return null;
+        }
+    }
 }

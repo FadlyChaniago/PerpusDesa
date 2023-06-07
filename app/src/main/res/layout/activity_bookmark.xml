@@ -8,25 +8,49 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/textViewBookmarkTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bookmark List"
-            android:textSize="20sp"
-            android:layout_margin="16dp" />
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewBookmark"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/textViewBookmarkTitle" />
+            android:padding="8dp"
+            tools:listitem="@layout/activity_bookmark" />
+        <TextView
+            android:id="@+id/txt_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Warning if list is empty!"/>
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_alignParentBottom="true">
+
+        <EditText
+            android:id="@+id/titleEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title" />
+
+        <EditText
+            android:id="@+id/urlEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="URL" />
+
+        <Button
+            android:id="@+id/addBookmarkButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Bookmark" />
+
+    </LinearLayout>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

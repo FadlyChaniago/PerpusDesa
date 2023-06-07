@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import com.example.perpusdesa.dao.BookmarkDao;
 import com.example.perpusdesa.model.Bookmark;
 
-@Database(entities = {Bookmark.class}, version = 1)
+@Database(entities = {Bookmark.class}, version = 2, exportSchema = false)
 public abstract class BookmarkDatabase extends RoomDatabase {
     private static BookmarkDatabase instance;
 

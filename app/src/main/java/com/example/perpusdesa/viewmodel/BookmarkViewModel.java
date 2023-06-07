@@ -2,36 +2,34 @@ package com.example.perpusdesa.viewmodel;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.perpusdesa.dao.repository.BookmarkRepository;
 import com.example.perpusdesa.model.Bookmark;
 
 import java.util.List;
 
-public class BookmarkViewModel extends ViewModel {
-
+public class BookmarkViewModel extends AndroidViewModel {
     private BookmarkRepository bookmarkRepository;
-    private MutableLiveData<List<Bookmark>> bookmarkList;
+    private LiveData<List<Bookmark>> allBookmarks;
 
-    public BookmarkViewModel(Application application) {
+    public BookmarkViewModel(@NonNull Application application) {
+        super(application);
         bookmarkRepository = new BookmarkRepository(application);
-        bookmarkList = (MutableLiveData<List<Bookmark>>) bookmarkRepository.getBookmarkListLiveData();
+        allBookmarks = bookmarkRepository.getAllBookmarks();
     }
 
-    public LiveData<List<Bookmark>> getBookmarkList() {
-        return bookmarkList;
+    public LiveData<List<Bookmark>> getAllBookmarks() {
+        return allBookmarks;
     }
 
-    public void addBookmark(Bookmark bookmark) {
-        bookmarkRepository.addBookmark(bookmark);
+    public void insertBookmark(Bookmark bookmark) {
+        bookmarkRepository.insertBookmark(bookmark);
     }
 
-    public void removeBookmark(Bookmark bookmark) {
-        bookmarkRepository.removeBookmark(bookmark);
+    public void deleteBookmark(Bookmark bookmark) {
+        bookmarkRepository.deleteBookmark(bookmark);
     }
-
-    // Metode lain yang diperlukan untuk operasi lain pada data bookmark
 }

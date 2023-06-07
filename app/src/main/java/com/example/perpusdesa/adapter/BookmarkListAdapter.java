@@ -4,83 +4,59 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.perpusdesa.R;
 import com.example.perpusdesa.model.Bookmark;
-import com.example.perpusdesa.model.PepusModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class BookmarkListAdapter extends RecyclerView.Adapter<BookmarkListAdapter.MyViewHolder> {
-
+public class BookmarkListAdapter extends RecyclerView.Adapter<BookmarkListAdapter.BookmarkViewHolder> {
     private Context context;
-    private List<Bookmark> bookmarkedList;
-    private ItemClickListener clickListener;
+    private List<Bookmark> bookmarkList;
 
-    public BookmarkListAdapter(Context context, List<Bookmark> bookmarkedList, ItemClickListener clickListener) {
+    public BookmarkListAdapter(Context context) {
         this.context = context;
-        this.bookmarkedList = bookmarkedList;
-        this.clickListener = clickListener;
+        this.bookmarkList = new ArrayList<>();
+
     }
 
-    public void setBookmarkedList(List<Bookmark> bookmarkedList) {
-        this.bookmarkedList = bookmarkedList;
+    public void setBookmarks(List<Bookmark> bookmarks) {
+        bookmarkList = bookmarks;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.row_book, parent, false);
-        return new MyViewHolder(view);
+    public BookmarkViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_bookmark, parent, false);
+        return new BookmarkViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Bookmark bookmarkedBook = bookmarkedList.get(position);
-
-        holder.tvTitle.setText(bookmarkedBook.getBookId());
-
-        // Anda dapat menambahkan properti lain dari objek Bookmark sesuai kebutuhan
-
-        // Menggunakan Glide untuk memuat gambar
-        Glide.with(context)
-                .load(bookmarkedBook.getImageUrl())
-                .apply(RequestOptions.centerCropTransform())
-                .into(holder.imageView);
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickListener.onBookmarkClick(bookmarkedBook);
-            }
-        });
+    public void onBindViewHolder(@NonNull BookmarkViewHolder holder, int position) {
+        Bookmark bookmark = bookmarkList.get(position);
+        holder.titleTextView.setText(bookmark.getTitle());
+        holder.urlTextView.setText(bookmark.getUrl());
     }
 
     @Override
     public int getItemCount() {
-        return bookmarkedList.size();
+        return bookmarkList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle;
-        ImageView imageView;
+    public class BookmarkViewHolder extends RecyclerView.ViewHolder {
+        TextView titleTextView;
+        TextView urlTextView;
 
-        public MyViewHolder(View itemView) {
+        public BookmarkViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.titleView);
-            imageView = itemView.findViewById(R.id.img_row);
+            titleTextView = itemView.findViewById(R.id.titleTextView);
+            urlTextView = itemView.findViewById(R.id.urlTextView);
         }
-    }
-
-    public interface ItemClickListener {
-        void onBookmarkClick(Bookmark bookmarkedBook);
     }
 }

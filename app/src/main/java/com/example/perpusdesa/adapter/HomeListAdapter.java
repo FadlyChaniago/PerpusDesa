@@ -3,6 +3,7 @@ package com.example.perpusdesa.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.perpusdesa.activity.BookmarkActivity;
 import com.example.perpusdesa.activity.DetailHomeActivity;
 import com.example.perpusdesa.R;
 import com.example.perpusdesa.model.PepusModel;
@@ -61,8 +63,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.MyView
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailHomeActivity.class);
-                intent.putExtra("image",perpusList.get(holder.getAdapterPosition()).getImage());
-                intent.putExtra("pdf", perpusList.get(holder.getAdapterPosition()).getUrl());
+                intent.putExtra("pdf", perpusList.get(holder.getAdapterPosition()).getPdfUrl());
                 context.startActivity(intent);
                 clickListener.onPerpusClick(perpusList.get(position));
             }
